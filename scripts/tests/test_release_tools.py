@@ -32,7 +32,7 @@ class LocalResponseHandler(BaseHTTPRequestHandler):
 
 class ReleaseToolsTests(unittest.TestCase):
     def test_restricted_paths(self):
-        for name in ("backend/.env", "backend/.env.production", "data/raw/contest.xlsx", "backend/data/demo.sqlite", "backend/evals/results/run.json", "frontend/node_modules/pkg/index.js", "downloads/source.zip"):
+        for name in ("backend/.env", "backend/.env.production", "data/raw/private_dataset.xlsx", "backend/data/demo.sqlite", "backend/evals/results/run.json", "frontend/node_modules/pkg/index.js", "downloads/source.zip"):
             self.assertTrue(blocked_path(name), name)
         for name in ("backend/.env.example", "backend/evals/results/.gitignore", "frontend/src/App.tsx", "backend/uv.lock"):
             self.assertFalse(blocked_path(name), name)

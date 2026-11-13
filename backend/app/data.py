@@ -1,4 +1,4 @@
-"""Public, deterministic, synthetic demo database. NO original contest data."""
+"""Deterministic synthetic demo database with fictional companies and a fixed seed."""
 from __future__ import annotations
 
 import random
