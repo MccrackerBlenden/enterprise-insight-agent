@@ -9,6 +9,24 @@ Enterprise Insight Agent 将经营数据分析、AI 辅助调查与受控业务�
 
 > 这是可本地运行的个人技术作品，**不是生产 SaaS**。不连接真实企业订单、仓储或物流系统；不含生产身份认证，也不应直接暴露于公网。
 
+## 产品界面 · 本地实机截图
+
+以下图片截取自本地浏览器运行的 **Enterprise Insight Agent**，均使用项目生成的合成演示数据。页面截图展示的是产品界面，并非真实企业运营记录或已完成的模型执行结果。
+
+### 经营决策总览
+
+![经营决策总览：合成数据经营指标、模型配置状态和分析入口](docs/screenshots/decision-overview.png)
+
+可查看 12 家虚构企业在 2023—2025 年的经营数据、年度关键指标、趋势图表与快捷分析入口。
+
+### Agent 工作台与运营处置中心
+
+| Agent 工作台 · 分析任务输入（模型未配置） | 运营处置中心 · 首次使用引导 |
+| :---: | :---: |
+| [![Agent 工作台待命界面，包含自然语言任务输入、常用任务和执行轨迹区域](docs/screenshots/agent-workspace-idle.png)](docs/screenshots/agent-workspace-idle.png) | [![运营处置中心新手引导，介绍异常事件处理的工作空间](docs/screenshots/operations-first-use.png)](docs/screenshots/operations-first-use.png) |
+
+Agent 截图处于**未配置模型的待命状态**，不代表已执行真实 AI 调用；运营截图展示的是**首次使用引导**，不是完成审批或模拟履约后的处理结果。完整的操作步骤见 [本地演示指南](docs/DEMO_GUIDE.md)。
+
 ## 核心功能
 
 | 工作空间 | 可以体验什么 | 主要实现 |
