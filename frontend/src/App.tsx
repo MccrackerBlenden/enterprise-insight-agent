@@ -45,7 +45,7 @@ const presets = [
   { icon: '01', title: '利润率下降分析', description: '定位下降幅度最大的企业及成本变化',
     question: '找出2025年相较2024年利润率下降最明显的三家企业，列出利润率及变化的百分点，并分析成本或费用的影响。' },
   { icon: '02', title: '企业经营排名', description: '识别盈利表现最优与最弱企业',
-    question: '根据2025年全年数据，按利润率对12家企业排序，找出表现最好和最差的三家，并给出真实指标。' },
+    question: '根据2025年全年数据，按利润率对12家企业排序，找出表现最好和最差的三家，并给出可核验的计算指标。' },
   { icon: '03', title: '行业趋势对比', description: '观察不同行业的经营表现',
     question: '比较2023年至2025年三个行业的营业收入和利润率变化，并指出趋势差异。' },
 ]
@@ -232,8 +232,8 @@ export default function App() {
             </div>
             <div className="overview-system-card">
               <div className="overview-system-head"><span>服务状态</span></div>
-              <div className="overview-system-state"><span className={'status-dot '+(health?.model_ready?'on':'off')}/><strong>{loading?'检测服务状态':health?.model_ready?'模型已就绪':'尚未配置模型'}</strong></div>
-              <p>{health?.model_ready?'模型服务已配置，可以执行真实工具调用。':'仍可查看合成数据，执行 Agent 需要先配置模型。'}</p>
+              <div className="overview-system-state"><span className={'status-dot '+(health?.model_ready?'on':'off')}/><strong>{loading?'检测服务状态':health?.model_ready?'模型配置已填写':'尚未配置模型'}</strong></div>
+              <p>{health?.model_ready?'模型参数已填写；实际调用仍需确认接口连通。':'仍可查看合成数据，执行 Agent 需要先配置模型。'}</p>
               <div className="overview-system-grid"><div><span>数据时间范围</span><strong>2023—2025</strong></div><div><span>演示企业</span><strong>{overview?.companies ?? '—'} <small>家</small></strong></div></div>
               <div className="overview-system-history"><span>最近分析</span>{history[0] ? <button type="button" onClick={()=>openSnapshot(history[0])}><span>{history[0].question}</span><ArrowRight size={14}/></button> : <small>尚无历史分析任务</small>}</div>
               <div className="overview-system-decoration" aria-hidden="true"><span/><span/><span/><span/><span/><span/><span/><span/></div>
@@ -253,7 +253,7 @@ export default function App() {
             <Suspense fallback={<div className="chart-loading">正在加载经营数据图表…</div>}><OverviewCharts data={overview} mode="dashboard"/></Suspense>
           </section>
           <section className="overview-launch-section" aria-label="快捷 Agent 分析">
-            <div className="overview-section-title"><div><span className="eyebrow">03 · 发起分析</span><h2>将观察变为行动</h2><p>从真实业务问题开始，交给 Agent 查询、计算与解释。</p></div><span className="overview-updated">点击「运行」将调用模型 API</span></div>
+            <div className="overview-section-title"><div><span className="eyebrow">03 · 发起分析</span><h2>将观察变为行动</h2><p>从模拟业务问题开始，交给 Agent 查询、计算与解释。</p></div><span className="overview-updated">点击「运行」将调用模型 API</span></div>
             <div className="overview-mission-grid">{presets.map(p => <article key={p.icon} className="overview-mission-card"><span className="overview-mission-index">{p.icon} · 分析示例</span><div className="overview-mission-content"><h3>{p.title}</h3><p>{p.description}</p></div><div className="overview-mission-actions"><button type="button" onClick={()=>{setQuestion(p.question);setView('workspace')}}>编辑任务 <ArrowRight size={14}/></button><button type="button" className="overview-mission-run" onClick={()=>void run(p.question)} disabled={running}><Play size={13}/> 立即运行</button></div></article>)}</div>
           </section>
           <p className="disclaimer"><CircleAlert size={15}/> 演示数据库全部由程序生成，企业与数据均为虚构，不用于真实经营或投资决策。</p>
@@ -277,7 +277,7 @@ export default function App() {
             <div className="mission-control">
               <span className="mission-control-label">当前任务</span>
               <div className="mission-control-status"><span className={'status-dot '+(running?'pulse':finished?'on':'off')}/><strong>{running?'任务执行中':historyMode?'历史快照':finished?'本次任务已完成':'待命 · 可以开始'}</strong></div>
-              <span className="mission-control-detail">{running ? '实时执行轨迹正在更新' : historyMode ? '已恢复先前执行结果，未重新调用模型' : finished ? '可查看分析成果与任务证据' : health?.model_ready ? '模型已就绪，等待提交分析任务' : '模型暂未就绪，请检查后端配置'}</span>
+              <span className="mission-control-detail">{running ? '实时执行轨迹正在更新' : historyMode ? '已恢复先前执行结果，未重新调用模型' : finished ? '可查看分析成果与任务证据' : health?.model_ready ? '模型配置已填写，等待提交分析任务' : '模型暂未就绪，请检查后端配置'}</span>
               <button className="mission-control-link" type="button" onClick={() => setHistoryOpen(true)}><Clock3 size={14}/> 查看历史任务 <ArrowRight size={15}/></button>
             </div>
           </section>
@@ -302,7 +302,7 @@ export default function App() {
                 {!running && !answer && !error && <div className="empty-result empty-report">
                   <div className="empty-report-symbol"><Workflow size={36}/><span className="empty-report-glow"/></div>
                   <div className="empty-report-copy"><span className="eyebrow">等待分析结果</span><strong>让结论有据可查</strong><p>任务执行后，这里会展示 Agent 的自然语言分析；经过程序核验的图表和证据表会独立出现。</p>
-                    <div className="empty-report-steps"><span><CheckCircle2 size={14}/> 查询真实数据</span><span><CheckCircle2 size={14}/> 验证计算依据</span><span><CheckCircle2 size={14}/> 导出任务报告</span></div>
+                    <div className="empty-report-steps"><span><CheckCircle2 size={14}/> 查询演示数据</span><span><CheckCircle2 size={14}/> 验证计算依据</span><span><CheckCircle2 size={14}/> 导出任务报告</span></div>
                   </div>
                 </div>}
               </section>
@@ -317,7 +317,7 @@ export default function App() {
           </div>
         </>}
       </div>
-      <footer><span>Enterprise Insight Agent</span><span>本地优先 · 合成演示数据 · 非真实企业信息</span><span>作品演示版本</span></footer>
+      <footer><span>Enterprise Insight Agent</span><span>本地优先 · 合成演示数据 · 非真实企业信息</span><span>非生产环境</span></footer>
     </main>
     {historyOpen && <div className="history-overlay"><button type="button" className="history-scrim" aria-label="关闭任务历史" onClick={() => setHistoryOpen(false)}/><section className="history-drawer" role="dialog" aria-modal="true" aria-label="本地任务历史"><div className="history-drawer-head"><div><span className="eyebrow">最近任务</span><h2>任务历史</h2><p>本地保存 · 最多八次已完成任务</p></div><button className="history-close" type="button" onClick={() => setHistoryOpen(false)} aria-label="关闭"><XCircle size={20}/></button></div><RunHistory items={history} busy={running} onOpen={openSnapshot} onRerun={(q) => { setHistoryOpen(false); void run(q) }} onClear={clearHistory}/></section></div>}
   </div>

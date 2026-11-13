@@ -24,7 +24,7 @@ python3 scripts/smoke_local_docker.py --base-url http://127.0.0.1:18080
 ## 发布安全检查
 
 ```bash
-# 创建新的公开发布仓库后、正式推送前执行：
+# 每次提交与发布前执行：
 python3 scripts/check_release_safety.py --require-locks
 python3 scripts/check_history_paths.py
 ```

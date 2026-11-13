@@ -24,9 +24,16 @@ def main() -> int:
     objects=0
     for line in result.stdout.splitlines():
         objects += 1
-        _, sep, path = line.partition(' ')
+        oid, sep, path = line.partition(' ')
         if sep and blocked_path(path):
-            high_risk.add(path)
+            result_type = subprocess.run(
+                ['git', '-C', str(ROOT), 'cat-file', '-t', oid],
+                capture_output=True, text=True)
+            if result_type.returncode != 0:
+                print('BLOCKED: cannot inspect object type')
+                return 2
+            if result_type.stdout.strip() == 'blob':
+                high_risk.add(path)
     if objects == 0:
         print('INFO: no reachable commits yet; this new repository has no history to inspect.')
         print('WARNING: original WSL Git history was not supplied or inspected.')

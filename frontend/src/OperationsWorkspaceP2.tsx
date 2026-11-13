@@ -708,7 +708,7 @@ export default function OperationsWorkspace() {
       <button className="ops-p2-receipt-dismiss" type="button" onClick={() => setLastReceipt(null)} aria-label="关闭操作结果提示">×</button>
     </section>}
     {area === 'overview' && seededDemo && <section className="ops-p2-seeded-demo" aria-label="独立合成演示案例">
-      <div className="ops-p2-seeded-demo-head"><div><span>独立演示环境</span><h2>三条真实业务状态演示</h2>
+      <div className="ops-p2-seeded-demo-head"><div><span>独立演示环境</span><h2>三条模拟业务状态演示</h2>
         <p>这些任务由独立演示数据库中的业务服务生成。仅查看不会写入；恢复或审批仍需本地授权与服务端校验。</p></div>
         <small>独立实例 · 全部合成</small></div>
       <div className="ops-p2-seeded-demo-items">{seededDemo.scenarios.map(example => {

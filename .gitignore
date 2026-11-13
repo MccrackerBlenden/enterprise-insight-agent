@@ -21,7 +21,7 @@ backend/app/*.bak
 # TypeScript incremental build artifacts
 **/*.tsbuildinfo
 
-# V0.5-B1: explicit pre-publication safeguards
+# Public release safeguards
 **/.env.*
 !**/.env.example
 **/*.sqlite3
@@ -35,5 +35,5 @@ backend/app/*.bak
 backend/evals/results/*
 !backend/evals/results/.gitignore
 
-# P2-C.2: disposable local demo sandboxes, never commit live data or tokens
+# Disposable local demo sandboxes, never commit live data or tokens
 .demo_runs/

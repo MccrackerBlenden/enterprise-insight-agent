@@ -41,7 +41,7 @@ export function OpsFirstUseGuide({ step, openCount, approvalCount, hasExample, s
           </div>
         </div>
       </div>
-      <div className="ops-p2-guide-footer"><small>只带你查看实际业务数据，不会自动调用模型、修改订单或执行审批。</small>
+      <div className="ops-p2-guide-footer"><small>只带你查看演示业务数据，不会自动调用模型、修改订单或执行审批。</small>
         <button type="button" onClick={onStart}>开始 · 认识待办 <ArrowRight size={15}/></button></div>
     </>}
     {step === 1 && <>
