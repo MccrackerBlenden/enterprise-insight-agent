@@ -1,0 +1,44 @@
+# Separate Compose project, separate synthetic analytics volume, and a bind-mounted
+# NEW scenario run directory. No reference to the normal ops_state volume.
+name: enterprise-insight-agent-p2-demo
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      EIA_OPS_DB_PATH: /workspace/opsdata/operations.sqlite
+      EIA_P2_DEMO_MODE: "1"
+      EIA_OPS_WRITE_TOKEN: ${EIA_DEMO_WRITE_TOKEN:-}
+      OPENAI_API_KEY: ""
+      OPENAI_MODEL: ""
+      OPENAI_BASE_URL: ""
+    volumes:
+      - type: bind
+        source: ${EIA_DEMO_RUN_DIR:?Set EIA_DEMO_RUN_DIR to a NEW generated demo directory}
+        target: /workspace/opsdata
+      - demo_analytics_db:/workspace/data
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3).close()"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    security_opt: ["no-new-privileges:true"]
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8081:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    security_opt: ["no-new-privileges:true"]
+
+volumes:
+  demo_analytics_db:

@@ -1,0 +1,22 @@
+[project]
+name = "enterprise-insight-agent-backend"
+version = "0.1.0"
+description = "Enterprise Insight Agent starter backend"
+requires-python = ">=3.11,<4.0"
+dependencies = [
+  "fastapi>=0.128,<1.0",
+  "uvicorn>=0.38,<1.0",
+  "python-dotenv>=1.0,<2.0",
+  "langchain>=1.4,<2.0",
+  "langchain-openai>=1.0,<3.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=9,<10", "httpx>=0.28,<1"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

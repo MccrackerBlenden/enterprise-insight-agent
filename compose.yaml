@@ -1,0 +1,45 @@
+name: enterprise-insight-agent
+
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - path: ./backend/.env
+        required: true
+    volumes:
+      - synthetic_db:/workspace/data
+      - ops_state:/workspace/opsdata
+    environment:
+      EIA_OPS_DB_PATH: /workspace/opsdata/operations.sqlite
+    expose:
+      - "8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3).close()"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:${EIA_WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  synthetic_db:
+  ops_state:

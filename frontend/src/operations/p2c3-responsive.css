@@ -1,0 +1,169 @@
+/* P2-C.3 — restrained presentation and adaptive interaction.
+ * Loaded ONLY by OperationsWorkspaceP2. All rules stay scoped under .ops-p2,
+ * so P1 fallback, homepage, Agent workspace and service-side gates are unchanged.
+ * Keep server-gated action semantics in TSX; this sheet only changes presentation.
+ */
+.ops-p2 {
+  --p2-visual-ring: #a6f4d7;
+  --p2-visual-focus: #73d7b5;
+  --p2-visual-divider: #345766;
+  min-width: 0;
+}
+
+/* Visual hierarchy: a restrained accent for the current action and crisp section dividers. */
+.ops-p2 :is(.ops-p2-tour, .ops-p2-seeded-demo, .ops-p2-guide,
+  .ops-p2-action-focus, .ops-p2-operation-receipt, .ops-p2-review-verdict,
+  .ops-p2-blocked, .ops-p2-evidence-brief, .ops-p2-handoff) {
+  max-width: 100%;
+  min-width: 0;
+}
+.ops-p2 :is(.ops-p2-action-focus, .ops-p2-blocked, .ops-p2-operation-receipt) {
+  box-shadow: 0 4px 16px #06141e20;
+}
+.ops-p2 .ops-p2-panel > .ops-surface {
+  overflow-wrap: anywhere;
+}
+.ops-p2 .ops-p2-stage-tabs button,
+.ops-p2 .ops-p2-navigation button,
+.ops-p2 :is(.ops-queue-item, .ops-p2-seeded-demo-item, .ops-p2-tour-list li) {
+  transition: background-color .16s ease, border-color .16s ease;
+}
+.ops-p2 .ops-p2-stage-tabs button[aria-selected="true"] {
+  background: #225145;
+  color: #f3fff9;
+  box-shadow: inset 0 -2px #86e3c2;
+}
+.ops-p2 .ops-p2-navigation button.active {
+  box-shadow: inset 0 2px #4eaf94;
+}
+.ops-p2 .ops-incident.ops-queue-item:focus-visible,
+.ops-p2 .ops-p2-tour-list button:focus-visible,
+.ops-p2 :is(button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--p2-visual-ring);
+  outline-offset: 3px;
+}
+.ops-p2 :is(.ops-p2-plan-recommend strong, .ops-p2-facts strong,
+  .ops-p2-capacity-summary strong, .ops-p2-quality strong) {
+  font-variant-numeric: tabular-nums;
+}
+.ops-p2 .ops-p2-tour-list li:last-child { border-bottom: 1px solid var(--p2-visual-divider); }
+.ops-p2 :is(.ops-p2-tour-copy, .ops-p2-seeded-demo-item, .ops-p2-action-target,
+  .ops-case-next, .ops-p2-operation-receipt) { overflow-wrap: anywhere; }
+
+/* Mid-size notebook and tablet: avoid three cramped columns of demonstration cases. */
+@media (max-width: 1120px) {
+  .ops-p2 .ops-p2-seeded-demo-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops-p2 .ops-p2-navigation button { padding: 12px; }
+  .ops-p2 .ops-p2-tour-heading { gap: 12px; }
+  .ops-p2 .ops-case-context { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops-p2 .ops-case-context > div:nth-child(2) { border-right: 0; }
+}
+
+@media (max-width: 820px) {
+  .ops-p2 { contain: paint; }
+  .ops-p2 .ops-p2-seeded-demo-items { grid-template-columns: 1fr; }
+  .ops-p2 .ops-p2-overview { min-width: 0; }
+  .ops-p2 .ops-p2-navigation { padding: 5px; gap: 5px; }
+  .ops-p2 .ops-p2-navigation button { min-height: 56px; }
+  .ops-p2 .ops-p2-tour-heading, .ops-p2 .ops-p2-seeded-demo-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ops-p2 .ops-p2-tour-stamp, .ops-p2 .ops-p2-seeded-demo-head small {
+    white-space: normal;
+  }
+}
+
+/* Compact screens: move the five stages into a *clearly scrollable* one-row strip.
+ * Do not shrink labels into unreadable pills, and do not stick it over form fields. */
+@media (max-width: 600px) {
+  .ops-p2 { gap: 13px; }
+  .ops-p2 .ops-heading-tools { width: 100%; justify-content: flex-start; }
+  .ops-p2 .ops-p2-navigation {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
+    padding: 6px;
+  }
+  .ops-p2 .ops-p2-navigation button {
+    flex: 1 0 142px;
+    min-height: 54px;
+    align-items: flex-start;
+    scroll-snap-align: start;
+  }
+  .ops-p2 .ops-p2-navigation button strong { font-size: 13px; }
+  .ops-p2 .ops-p2-navigation button small { font-size: 12px; }
+  .ops-p2 .ops-overview-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops-p2 .ops-overview-strip > div { padding: 12px; }
+  .ops-p2 .ops-overview-strip span { white-space: normal; line-height: 1.45; }
+  .ops-p2 .ops-incidents { padding: 15px; }
+  .ops-p2 .ops-incident-list { grid-template-columns: minmax(0, 1fr); }
+  .ops-p2 .ops-queue-item { min-height: 0; }
+  .ops-p2 .ops-case-hero { padding: 16px; }
+  .ops-p2 .ops-case-hero h2 { font-size: 19px; }
+  .ops-p2 .ops-case-context { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ops-p2 .ops-case-next { flex-direction: column; align-items: flex-start; }
+  .ops-p2 .ops-case-next button { white-space: normal; }
+  .ops-p2 .ops-case-tabs {
+    position: static;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
+    padding: 5px;
+    min-height: 54px;
+  }
+  .ops-p2 .ops-case-tabs button {
+    flex: 0 0 auto;
+    min-width: 87px;
+    min-height: 42px;
+    font-size: 13px;
+    padding: 10px 12px;
+    scroll-snap-align: start;
+  }
+  .ops-p2 .ops-p2-panel > .ops-surface { padding: 16px; }
+  .ops-p2 .ops-p2-facts { grid-template-columns: 1fr; }
+  .ops-p2 .ops-p2-facts > div { padding: 13px; }
+  .ops-p2 .ops-p2-action-focus { padding: 16px; }
+  .ops-p2 .ops-p2-action-focus > h3 { font-size: 18px; }
+  .ops-p2 .ops-p2-action-buttons { flex-direction: column; align-items: stretch; }
+  .ops-p2 .ops-p2-action-buttons button { width: 100%; min-height: 44px; }
+  .ops-p2 .ops-p2-capacity-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops-p2 .ops-p2-operation-receipt { flex-direction: column; align-items: stretch; }
+  .ops-p2 .ops-p2-operation-receipt > button:not(.ops-p2-receipt-dismiss) {
+    align-self: flex-start;
+    white-space: normal;
+    min-height: 42px;
+  }
+  .ops-p2 .ops-p2-tour-list li { flex-wrap: wrap; gap: 8px 12px; }
+  .ops-p2 .ops-p2-tour-list button, .ops-p2 .ops-p2-tour-unavailable {
+    margin-left: 40px;
+  }
+  .ops-p2 .ops-p2-seeded-demo { padding: 16px; }
+  .ops-p2 .ops-p2-seeded-demo-item button { min-height: 42px; }
+  .ops-p2 :is(input, textarea, select) { max-width: 100%; }
+}
+
+@media (max-width: 400px) {
+  .ops-p2 .ops-p2-capacity-summary { grid-template-columns: 1fr; }
+  .ops-p2 .ops-overview-strip strong { font-size: 21px; }
+  .ops-p2 .ops-case-context { grid-template-columns: 1fr; }
+  .ops-p2 .ops-case-context > div { border-right: 0; border-bottom: 1px solid #365460; padding: 0 0 7px; }
+  .ops-p2 .ops-case-context > div:last-child { border-bottom: 0; }
+  .ops-p2 .ops-p2-guide-header { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ops-p2 .ops-p2-stage-tabs button,
+  .ops-p2 .ops-p2-navigation button,
+  .ops-p2 :is(.ops-queue-item, .ops-p2-seeded-demo-item, .ops-p2-tour-list li) {
+    transition: none;
+  }
+}

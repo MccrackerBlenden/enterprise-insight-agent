@@ -1,0 +1,32 @@
+{"id":"M01","kind":"metric","question":"按2025年净利润率为12家企业排名，列出最高和最低的三家。","metric":"margin","group_by":"company","start_year":2025,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M02","kind":"metric","question":"比较2023至2025年三个行业的营业收入趋势，给出逐年数值。","metric":"revenue","group_by":"industry_year","start_year":2023,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M03","kind":"metric","question":"分析2023年至2025年各行业净利润率的年度趋势。","metric":"margin","group_by":"industry_year","start_year":2023,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M04","kind":"metric","question":"请列出2025年营业成本率最高的5家企业，并说明数值。","metric":"cost_rate","group_by":"company","start_year":2025,"end_year":2025,"order":"desc","top_n":5,"live":true}
+{"id":"M05","kind":"metric","question":"计算2023、2024、2025年全体企业的净利润总额变化。","metric":"net_profit","group_by":"year","start_year":2023,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M06","kind":"metric","question":"按行业比较2025年的营业收入总额。","metric":"revenue","group_by":"industry","start_year":2025,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M07","kind":"metric","question":"2024年三个行业的费用率分别是多少？","metric":"expense_rate","group_by":"industry","start_year":2024,"end_year":2024,"order":"desc","top_n":12,"live":true}
+{"id":"M08","kind":"metric","question":"列出2025年净利润总额最高的前5家企业。","metric":"net_profit","group_by":"company","start_year":2025,"end_year":2025,"order":"desc","top_n":5,"live":true}
+{"id":"M09","kind":"metric","question":"2023年营业收入最低的3家企业是哪几家？","metric":"revenue","group_by":"company","start_year":2023,"end_year":2023,"order":"asc","top_n":3,"live":true}
+{"id":"M10","kind":"metric","question":"按年度比较2023—2025年的全体企业成本率。","metric":"cost_rate","group_by":"year","start_year":2023,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M11","kind":"metric","question":"查询2024年净利润率最低的5家企业。","metric":"margin","group_by":"company","start_year":2024,"end_year":2024,"order":"asc","top_n":5,"live":true}
+{"id":"M12","kind":"metric","question":"分析2024到2025年各行业的净利润总额。","metric":"net_profit","group_by":"industry_year","start_year":2024,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"M13","kind":"metric","question":"比较2023年的企业费用率排名。","metric":"expense_rate","group_by":"company","start_year":2023,"end_year":2023,"order":"desc","top_n":12,"live":true}
+{"id":"M14","kind":"metric","question":"查看2025年三个行业的净利润率，从低到高排序。","metric":"margin","group_by":"industry","start_year":2025,"end_year":2025,"order":"asc","top_n":12,"live":true}
+{"id":"M15","kind":"metric","question":"2023—2025年各年的营业收入合计是多少？","metric":"revenue","group_by":"year","start_year":2023,"end_year":2025,"order":"desc","top_n":12,"live":true}
+{"id":"D01","kind":"decline","question":"找出2025年相比2024年净利润率下降最明显的三家企业，并分析成本及费用率变化。","limit":3,"live":true}
+{"id":"D02","kind":"decline","question":"分析2024年到2025年利润率下降最多的两家企业，计算百分点变化。","limit":2,"live":true}
+{"id":"S01","kind":"sql_allow","sql":"SELECT COUNT(*) AS total FROM companies;","expect_rows":[{"total":12}]}
+{"id":"S02","kind":"sql_allow","sql":"WITH s AS (SELECT COUNT(*) AS n FROM monthly_financials) SELECT n FROM s;","expect_rows":[{"n":432}]}
+{"id":"S03","kind":"sql_allow","sql":"SELECT industry, COUNT(*) AS n FROM companies GROUP BY industry ORDER BY industry;","expect_row_count":3}
+{"id":"S04","kind":"sql_allow","sql":"SELECT c.company_name, SUM(f.revenue) AS amount FROM companies c JOIN monthly_financials f ON c.company_id=f.company_id WHERE f.year=2025 GROUP BY c.company_name;","expect_row_count":12}
+{"id":"X01","kind":"sql_deny","sql":"SELECT * FROM companies; DELETE FROM companies;"}
+{"id":"X02","kind":"sql_deny","sql":"SELECT * FROM sqlite_master;"}
+{"id":"X03","kind":"sql_deny","sql":"SELECT 1; SELECT 2;"}
+{"id":"X04","kind":"sql_deny","sql":"DELETE FROM companies;"}
+{"id":"X05","kind":"sql_deny","sql":"SELECT * FROM companies -- hiding"}
+{"id":"X06","kind":"sql_deny","sql":"WITH t AS (SELECT 1) SELECT * FROM t; DROP TABLE companies;"}
+{"id":"V01","kind":"metric_deny","params":{"metric":"revenue","group_by":"unknown"}}
+{"id":"V02","kind":"metric_deny","params":{"metric":"unknown","group_by":"company"}}
+{"id":"V03","kind":"metric_deny","params":{"metric":"margin","group_by":"company","start_year":2026}}
+{"id":"V04","kind":"metric_deny","params":{"metric":"margin","group_by":"company","top_n":100}}
+{"id":"V05","kind":"metric_deny","params":{"metric":"margin","group_by":"company","start_year":2025,"end_year":2024}}

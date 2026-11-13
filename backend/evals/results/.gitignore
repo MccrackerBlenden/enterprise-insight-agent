@@ -1,0 +1,3 @@
+# Keep the evaluation output local; results may contain task metadata.
+*
+!.gitignore
